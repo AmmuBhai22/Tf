@@ -16,7 +16,10 @@ def credit():
 def handle_auto(channel_id):
     response = requests.get(API_ENDPOINT + f"cdn/live/{channel_id}/playlist.m3u8", headers=headers)
     myresponse = make_response(response.text.replace("../slang/", "/single/slang/").replace("?", "-"))
+    myresponse.headers["Access-Control-Allow-Headers"]="Origin, Content-Type, Accept"
+    myresponse.headers["Access-Control-Allow-Methods"]="GET, OPTIONS"
     myresponse.headers["Content-Type"] = "application/vnd.apple.mpegurl"
+    myresponse.headers["Access-Control-Allow-Origin"]="*"
     return myresponse
 
 @app.route("/single/<path:path>")
@@ -25,6 +28,9 @@ def handle_single(path):
     print(single_url)
     response = requests.get(single_url, headers=headers)
     myresponse = make_response(response.text.replace("/live/", f"/ts/live/"))
+    myresponse.headers["Access-Control-Allow-Origin"]="*"
+    myresponse.headers["Access-Control-Allow-Headers"]="Origin, Content-Type, Accept"
+    myresponse.headers["Access-Control-Allow-Methods"]="GET, OPTIONS"
     myresponse.headers["Content-Type"] = "application/vnd.apple.mpegurl"
     return myresponse
 
@@ -33,16 +39,13 @@ def handle_ts(tspath):
     ts_url="https://bldcmprod-cdn.toffeelive.com/" + str(tspath)
     resp=requests.get(ts_url) 
     out=make_response(resp.content)
+    out.headers["Access-Control-Allow-Origin"]="*"
+    out.headers["Access-Control-Allow-Headers"]="Origin, Content-Type, Accept"
+    out.headers["Access-Control-Allow-Methods"]="GET, OPTIONS"
     out.headers["Content-Type"] = "application/octet-stream"
     return out
+  
 """
-@app.route("/ts/<ts:ts>")
-def handle_ts(ts):
-    ts_url="https://bldcmprod-cdn.toffeelive.com/" + ts 
-    resp=requests.get(ts_url,headers=headers) 
-    out=make_response(resp.text)
-    out.headers["Content-Type"] = "video/mp2t"
-    return out
-#if __name__ == "__main__":
-    #app.run(debug=True)
+if __name__ == "__main__":
+    app.run(debug=True)
 """
