@@ -24,7 +24,7 @@ def handle_single(path):
     single_url = API_ENDPOINT + "cdn/live/" + path.replace("-", "?")
     print(single_url)
     response = requests.get(single_url, headers=headers)
-    myresponse = make_response(response.text.replace("/live/", f"{API_ENDPOINT}/live/"))
+    myresponse = make_response(response.text.replace("/live/", f"/ts/live/"))
     myresponse.headers["Content-Type"] = "application/vnd.apple.mpegurl"
     return myresponse
 
