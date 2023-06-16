@@ -28,5 +28,12 @@ def handle_single(path):
     myresponse.headers["Content-Type"] = "application/vnd.apple.mpegurl"
     return myresponse
 
+@app.route("/ts/<ts:ts>")
+def handle_ts(ts):
+    ts_url="https://bldcmprod-cdn.toffeelive.com/" + ts 
+    resp=requests.get(ts_url,headers=headers) 
+    out=make_response(resp.text)
+    out.headers["Content-Type"] = "video/mp2t"
+    return out
 #if __name__ == "__main__":
  #   app.run(debug=True)
