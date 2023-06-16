@@ -27,6 +27,14 @@ def handle_single(path):
     myresponse = make_response(response.text.replace("/live/", f"/ts/live/"))
     myresponse.headers["Content-Type"] = "application/vnd.apple.mpegurl"
     return myresponse
+
+@app.route("/ts/<path:tspath>")
+def handle_ts(tspath):
+    ts_url="https://bldcmprod-cdn.toffeelive.com/" + str(tspath)
+    resp=requests.get(ts_url) 
+    out=make_response(resp.content)
+    out.headers["Content-Type"] = "application/octet-stream"
+    return out
 """
 @app.route("/ts/<ts:ts>")
 def handle_ts(ts):
